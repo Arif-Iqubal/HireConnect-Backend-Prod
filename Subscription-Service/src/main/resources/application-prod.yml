@@ -1,0 +1,68 @@
+server:
+  port: ${PORT:8087}
+
+spring:
+  application:
+    name: SUBSCRIPTION-SERVICE
+  datasource:
+    url: jdbc:mysql://mysql-8c1096a-hireconnectdb00.h.aivencloud.com:18881/subscription_db?ssl-mode=REQUIRED
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  subscription:
+    plans:
+      free:
+        max-job-posts: ${FREE_PLAN_MAX_JOB_POSTS:3}
+        price: ${FREE_PLAN_PRICE:0.0}
+      professional:
+        max-job-posts: ${PROFESSIONAL_PLAN_MAX_JOB_POSTS:50}
+        price: ${PROFESSIONAL_PLAN_PRICE:1999.0}
+        duration-days: ${PROFESSIONAL_PLAN_DURATION_DAYS:30}
+      enterprise:
+        max-job-posts: ${ENTERPRISE_PLAN_MAX_JOB_POSTS:999}
+        price: ${ENTERPRISE_PLAN_PRICE:4999.0}
+        duration-days: ${ENTERPRISE_PLAN_DURATION_DAYS:30}
+  payment:
+    razorpay:
+      key-id: ${RAZORPAY_KEY_ID}
+      key-secret: ${RAZORPAY_KEY_SECRET}
+  services:
+    auth-url: ${AUTH_SERVICE_URL}/api/v1/auth
+  rabbitmq:
+    exchange: ${RABBITMQ_EXCHANGE:hireconnect.exchange}
+    routing-key:
+      notification: ${RABBITMQ_NOTIFICATION_ROUTING_KEY:notification.routing.key}
+
+logging:
+  level:
+    root: WARN
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

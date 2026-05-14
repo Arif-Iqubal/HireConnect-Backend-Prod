@@ -1,0 +1,48 @@
+server:
+  port: ${PORT:8082}
+
+spring:
+  application:
+    name: profile-service
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:10MB}
+      max-request-size: ${MAX_REQUEST_SIZE:10MB}
+  datasource:
+    url: jdbc:mysql://mysql-8c1096a-hireconnectdb00.h.aivencloud.com:18881/profile_db?ssl-mode=REQUIRED
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+app:
+  upload:
+    resume-dir: ${FILE_UPLOAD_DIR:uploads/resumes}
+  jwt:
+    secret: ${JWT_SECRET}
+
+logging:
+  level:
+    root: WARN
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

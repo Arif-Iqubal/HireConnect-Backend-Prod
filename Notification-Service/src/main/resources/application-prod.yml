@@ -1,0 +1,73 @@
+server:
+  port: ${PORT:8086}
+
+spring:
+  application:
+    name: NOTIFICATION-SERVICE
+  datasource:
+    url: jdbc:mysql://mysql-8c1096a-hireconnectdb00.h.aivencloud.com:18881/notification_db?ssl-mode=REQUIRED
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+    listener:
+      simple:
+        acknowledge-mode: auto
+        retry:
+          enabled: true
+          initial-interval: 1000
+          max-attempts: 3
+          multiplier: 2
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  rabbitmq:
+    exchange: ${RABBITMQ_EXCHANGE:hireconnect.exchange}
+    routing-key:
+      notification: ${RABBITMQ_NOTIFICATION_ROUTING_KEY:notification.routing.key}
+  mail:
+    from: ${MAIL_FROM:${MAIL_USERNAME}}
+    from-name: ${MAIL_FROM_NAME:HireConnect}
+  services:
+    auth-url: ${AUTH_SERVICE_URL}/api/v1/auth
+
+logging:
+  level:
+    root: WARN
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

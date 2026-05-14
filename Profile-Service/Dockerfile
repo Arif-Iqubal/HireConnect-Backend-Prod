@@ -25,4 +25,4 @@ COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8082
 
-ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+ENTRYPOINT ["java","-Xms128m","-Xmx256m","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]

@@ -1,0 +1,61 @@
+server:
+  port: ${PORT:8084}
+
+spring:
+  application:
+    name: application-service
+  datasource:
+    url: jdbc:mysql://mysql-8c1096a-hireconnectdb00.h.aivencloud.com:18881/application_db?ssl-mode=REQUIRED
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+  cloud:
+    openfeign:
+      client:
+        config:
+          profile-service:
+            url: ${PROFILE_SERVICE_URL}
+          job-service:
+            url: ${JOB_SERVICE_URL}
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  rabbitmq:
+    exchange: ${RABBITMQ_EXCHANGE:hireconnect.exchange}
+    routing-key:
+      notification: ${RABBITMQ_NOTIFICATION_ROUTING_KEY:notification.routing.key}
+      analytics: ${RABBITMQ_ANALYTICS_ROUTING_KEY:analytics.routing.key}
+
+logging:
+  level:
+    root: WARN
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

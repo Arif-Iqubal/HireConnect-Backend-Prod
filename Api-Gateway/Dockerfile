@@ -10,4 +10,4 @@ RUN addgroup -S hireconnect && adduser -S hireconnect -G hireconnect
 USER hireconnect
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-XX:+UseContainerSupport","-XX:MaxRAMPercentage=75.0","-jar","app.jar"]
+ENTRYPOINT ["java","-Xms128m","-Xmx256m","-jar","app.jar"]

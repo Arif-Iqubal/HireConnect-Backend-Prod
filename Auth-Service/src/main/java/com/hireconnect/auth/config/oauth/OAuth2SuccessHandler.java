@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,6 +23,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserCredentialRepository userRepository;
     private final JwtService jwtService;
+
+    @Value("${app.frontend-url:http://localhost:4200}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -65,7 +69,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         String redirectUrl =
-        	    "http://localhost:4200/auth/github/callback"
+        	    frontendUrl.replaceAll("/$", "") + "/auth/github/callback"
         	        + "?accessToken=" + accessToken
         	        + "&refreshToken=" + refreshToken
         	        + "&userId=" + user.getUserId()
