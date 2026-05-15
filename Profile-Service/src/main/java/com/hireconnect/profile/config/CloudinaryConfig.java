@@ -2,7 +2,11 @@ package com.hireconnect.profile.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +21,20 @@ public class CloudinaryConfig {
 
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
+    
+    @PostConstruct
+    public void init() {
+        System.out.println("========== CLOUDINARY CONFIG INIT ==========");
+    }
+    
+    @Bean
+    public CommandLineRunner runner() {
+        return args -> {
+            System.out.println("========== NEW BUILD RUNNING ==========");
+        };
+    }
+    
+    
 
     @Bean
     public Cloudinary cloudinary() {
@@ -28,4 +46,6 @@ public class CloudinaryConfig {
                 "secure", true
         ));
     }
+    
+    
 }
