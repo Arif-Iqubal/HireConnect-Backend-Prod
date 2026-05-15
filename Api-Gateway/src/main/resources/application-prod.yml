@@ -78,6 +78,22 @@ spring:
           filters:
             - name: JwtAuthenticationFilter
 
+         # AUTH SWAGGER
+        - id: auth-service-docs
+          uri: ${AUTH_SERVICE_URL}
+          predicates:
+           - Path=/docs/auth-service/**
+          filters:
+           - RewritePath=/docs/auth-service/(?<segment>.*), /$\{segment}
+
+         # PROFILE SWAGGER
+        - id: profile-service-docs
+          uri: ${PROFILE_SERVICE_URL}
+          predicates:
+           - Path=/docs/profile-service/**
+          filters:
+           - RewritePath=/docs/profile-service/(?<segment>.*), /$\{segment}
+
 eureka:
   client:
     enabled: false
