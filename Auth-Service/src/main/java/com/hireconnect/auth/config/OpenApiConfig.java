@@ -33,8 +33,8 @@ public class OpenApiConfig {
                                 .url("https://hireconnect.com"))
                         .license(new License().name("MIT").url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Via API Gateway")
-                ))
+                	    new Server().url("/").description("Via API Gateway")
+                		))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
