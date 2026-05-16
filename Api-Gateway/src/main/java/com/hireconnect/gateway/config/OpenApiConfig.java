@@ -10,12 +10,11 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .servers(List.of(
-                        new Server()
-                                .url("https://hireconnect-backend-prod-production.up.railway.app")
-                ));
-    }
+	 @Bean
+	    public OpenAPI customOpenAPI() {
+	        return new OpenAPI()
+	                .servers(List.of(
+	                        new Server().url("/")
+	                ));
+	    }
 }
