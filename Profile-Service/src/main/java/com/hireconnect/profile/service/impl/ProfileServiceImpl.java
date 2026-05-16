@@ -59,11 +59,11 @@ public class ProfileServiceImpl implements ProfileService {
 			throw new ProfileAlreadyExistsException(userId);
 		}
 		CandidateProfile profile = CandidateProfile.builder().userId(userId).fullName(request.getFullName())
-				.email(request.getEmail()).mobile(
-						request.getMobile())
-				.dob(request.getDob()).gender(request.getGender())
-				.skills(request.getSkills() != null ? request.getSkills().stream()
-						.map(skill -> CandidateSkill.builder().skill(skill).build()).collect(Collectors.toCollection(ArrayList::new)) : new ArrayList<>())
+				.email(request.getEmail()).mobile(request.getMobile()).dob(request.getDob()).gender(request.getGender())
+				.skills(request.getSkills() != null
+						? request.getSkills().stream().map(skill -> CandidateSkill.builder().skill(skill).build())
+								.collect(Collectors.toCollection(ArrayList::new))
+						: new ArrayList<>())
 
 				.experience(request.getExperience()).resumeUrl(request.getResumeUrl())
 				.linkedinUrl(request.getLinkedinUrl()).githubUrl(request.getGithubUrl())
@@ -73,9 +73,8 @@ public class ProfileServiceImpl implements ProfileService {
 				.isOpenToRemote(request.getIsOpenToRemote() != null ? request.getIsOpenToRemote() : false)
 				.preferredLocations(
 						request.getPreferredLocations() != null
-								? request.getPreferredLocations().stream()
-										.map(location -> CandidatePreferredLocation.builder().location(location)
-												.build())
+								? request.getPreferredLocations().stream().map(
+										location -> CandidatePreferredLocation.builder().location(location).build())
 										.collect(Collectors.toCollection(ArrayList::new))
 								: new ArrayList<>())
 				.addresses(new ArrayList<>(toAddresses(request))).build();
@@ -104,8 +103,11 @@ public class ProfileServiceImpl implements ProfileService {
 		if (request.getGender() != null)
 			profile.setGender(request.getGender());
 		if (request.getSkills() != null) {
-			profile.setSkills(
-					request.getSkills().stream().map(skill -> CandidateSkill.builder().skill(skill).build()).collect(Collectors.toCollection(ArrayList::new)));
+			profile.getSkills().clear();
+
+			profile.getSkills()
+					.addAll(request.getSkills().stream().map(skill -> CandidateSkill.builder().skill(skill).build())
+							.collect(Collectors.toCollection(ArrayList::new)));
 		}
 		if (request.getExperience() != null)
 			profile.setExperience(request.getExperience());
@@ -130,8 +132,12 @@ public class ProfileServiceImpl implements ProfileService {
 		if (request.getIsOpenToRemote() != null)
 			profile.setIsOpenToRemote(request.getIsOpenToRemote());
 		if (request.getPreferredLocations() != null) {
-			profile.setPreferredLocations(request.getPreferredLocations().stream()
-					.map(location -> CandidatePreferredLocation.builder().location(location).build()).collect(Collectors.toCollection(ArrayList::new)));
+			profile.getPreferredLocations().clear();
+
+			profile.getPreferredLocations()
+					.addAll(request.getPreferredLocations().stream()
+							.map(location -> CandidatePreferredLocation.builder().location(location).build())
+							.collect(Collectors.toCollection(ArrayList::new)));
 		}
 		if (request.getAddresses() != null) {
 			replaceList(profile.getAddresses(), toAddresses(request), profile::setAddresses);
@@ -314,18 +320,18 @@ public class ProfileServiceImpl implements ProfileService {
 		return CandidateProfileResponse.builder().profileId(p.getProfileId()).userId(p.getUserId())
 				.fullName(p.getFullName()).email(p.getEmail()).mobile(p.getMobile()).dob(p.getDob())
 				.gender(p.getGender())
-				.skills(p.getSkills() != null ? p.getSkills().stream().map(CandidateSkill::getSkill).collect(Collectors.toCollection(ArrayList::new))
-						: List.of())
+				.skills(p.getSkills() != null ? p.getSkills().stream().map(CandidateSkill::getSkill)
+						.collect(Collectors.toCollection(ArrayList::new)) : List.of())
 				.experience(p.getExperience()).resumeUrl(p.getResumeUrl()).linkedinUrl(p.getLinkedinUrl())
 				.githubUrl(p.getGithubUrl()).portfolioUrl(p.getPortfolioUrl()).summary(p.getSummary())
 				.currentCompany(p.getCurrentCompany()).currentDesignation(p.getCurrentDesignation())
 				.expectedSalary(p.getExpectedSalary()).noticePeriodDays(p.getNoticePeriodDays())
 				.isOpenToRemote(p.getIsOpenToRemote())
-				.preferredLocations(p.getPreferredLocations() != null
-						? p.getPreferredLocations().stream().map(CandidatePreferredLocation::getLocation).collect(Collectors.toCollection(ArrayList::new))
+				.preferredLocations(p.getPreferredLocations() != null ? p.getPreferredLocations().stream()
+						.map(CandidatePreferredLocation::getLocation).collect(Collectors.toCollection(ArrayList::new))
 						: List.of())
-				.addresses(p.getAddresses() != null ? p.getAddresses().stream().map(this::toAddressResponse).collect(Collectors.toCollection(ArrayList::new))
-						: java.util.List.of())
+				.addresses(p.getAddresses() != null ? p.getAddresses().stream().map(this::toAddressResponse)
+						.collect(Collectors.toCollection(ArrayList::new)) : java.util.List.of())
 				.createdAt(p.getCreatedAt()).updatedAt(p.getUpdatedAt()).build();
 	}
 
