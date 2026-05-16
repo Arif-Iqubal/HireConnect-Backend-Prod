@@ -175,14 +175,15 @@ public class ProfileServiceImpl implements ProfileService {
 				+ originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
 
 		try {
-			Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-					ObjectUtils.asMap(
-						    "resource_type", "raw",
-						    "type", "upload",
-						    "access_mode", "public",
-						    "folder", "hireconnect/resumes",
-						    "public_id", fileName
-						));
+			Map uploadResult = cloudinary.uploader().upload(
+				    file.getBytes(),
+				    ObjectUtils.asMap(
+				        "resource_type", "auto",
+				        "type", "upload",
+				        "folder", "hireconnect/resumes",
+				        "public_id", fileName
+				    )
+				);
 
 			String resumeUrl = uploadResult.get("secure_url").toString();
 
