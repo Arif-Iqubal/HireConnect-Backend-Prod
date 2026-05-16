@@ -176,7 +176,13 @@ public class ProfileServiceImpl implements ProfileService {
 
 		try {
 			Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-					ObjectUtils.asMap("resource_type", "raw", "folder", "hireconnect/resumes", "public_id", fileName));
+					ObjectUtils.asMap(
+						    "resource_type", "raw",
+						    "type", "upload",
+						    "access_mode", "public",
+						    "folder", "hireconnect/resumes",
+						    "public_id", fileName
+						));
 
 			String resumeUrl = uploadResult.get("secure_url").toString();
 
