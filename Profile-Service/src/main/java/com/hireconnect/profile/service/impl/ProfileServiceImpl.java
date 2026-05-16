@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -62,7 +63,7 @@ public class ProfileServiceImpl implements ProfileService {
 						request.getMobile())
 				.dob(request.getDob()).gender(request.getGender())
 				.skills(request.getSkills() != null ? request.getSkills().stream()
-						.map(skill -> CandidateSkill.builder().skill(skill).build()).toList() : new ArrayList<>())
+						.map(skill -> CandidateSkill.builder().skill(skill).build()).collect(Collectors.toCollection(ArrayList::new)) : new ArrayList<>())
 
 				.experience(request.getExperience()).resumeUrl(request.getResumeUrl())
 				.linkedinUrl(request.getLinkedinUrl()).githubUrl(request.getGithubUrl())
@@ -75,7 +76,7 @@ public class ProfileServiceImpl implements ProfileService {
 								? request.getPreferredLocations().stream()
 										.map(location -> CandidatePreferredLocation.builder().location(location)
 												.build())
-										.toList()
+										.collect(Collectors.toCollection(ArrayList::new))
 								: new ArrayList<>())
 				.addresses(new ArrayList<>(toAddresses(request))).build();
 		CandidateProfile saved = candidateRepo.save(profile);
@@ -104,7 +105,7 @@ public class ProfileServiceImpl implements ProfileService {
 			profile.setGender(request.getGender());
 		if (request.getSkills() != null) {
 			profile.setSkills(
-					request.getSkills().stream().map(skill -> CandidateSkill.builder().skill(skill).build()).toList());
+					request.getSkills().stream().map(skill -> CandidateSkill.builder().skill(skill).build()).collect(Collectors.toCollection(ArrayList::new)));
 		}
 		if (request.getExperience() != null)
 			profile.setExperience(request.getExperience());
@@ -130,7 +131,7 @@ public class ProfileServiceImpl implements ProfileService {
 			profile.setIsOpenToRemote(request.getIsOpenToRemote());
 		if (request.getPreferredLocations() != null) {
 			profile.setPreferredLocations(request.getPreferredLocations().stream()
-					.map(location -> CandidatePreferredLocation.builder().location(location).build()).toList());
+					.map(location -> CandidatePreferredLocation.builder().location(location).build()).collect(Collectors.toCollection(ArrayList::new)));
 		}
 		if (request.getAddresses() != null) {
 			replaceList(profile.getAddresses(), toAddresses(request), profile::setAddresses);
@@ -197,7 +198,7 @@ public class ProfileServiceImpl implements ProfileService {
 				.filter(profile -> profile.getEmail() != null && !profile.getEmail().isBlank())
 				.map(profile -> new CandidateNotificationRecipientResponse(profile.getUserId(), profile.getFullName(),
 						profile.getEmail()))
-				.toList();
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	// ─── Recruiter ────────────────────────────────────────────────────────────
@@ -284,7 +285,7 @@ public class ProfileServiceImpl implements ProfileService {
 						.addressType(a.getAddressType() != null && !a.getAddressType().isBlank() ? a.getAddressType()
 								: "HOME")
 						.build())
-				.toList();
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private <T> void replaceList(List<T> current, List<T> replacement, Consumer<List<T>> setter) {
@@ -313,7 +314,7 @@ public class ProfileServiceImpl implements ProfileService {
 		return CandidateProfileResponse.builder().profileId(p.getProfileId()).userId(p.getUserId())
 				.fullName(p.getFullName()).email(p.getEmail()).mobile(p.getMobile()).dob(p.getDob())
 				.gender(p.getGender())
-				.skills(p.getSkills() != null ? p.getSkills().stream().map(CandidateSkill::getSkill).toList()
+				.skills(p.getSkills() != null ? p.getSkills().stream().map(CandidateSkill::getSkill).collect(Collectors.toCollection(ArrayList::new))
 						: List.of())
 				.experience(p.getExperience()).resumeUrl(p.getResumeUrl()).linkedinUrl(p.getLinkedinUrl())
 				.githubUrl(p.getGithubUrl()).portfolioUrl(p.getPortfolioUrl()).summary(p.getSummary())
@@ -321,9 +322,9 @@ public class ProfileServiceImpl implements ProfileService {
 				.expectedSalary(p.getExpectedSalary()).noticePeriodDays(p.getNoticePeriodDays())
 				.isOpenToRemote(p.getIsOpenToRemote())
 				.preferredLocations(p.getPreferredLocations() != null
-						? p.getPreferredLocations().stream().map(CandidatePreferredLocation::getLocation).toList()
+						? p.getPreferredLocations().stream().map(CandidatePreferredLocation::getLocation).collect(Collectors.toCollection(ArrayList::new))
 						: List.of())
-				.addresses(p.getAddresses() != null ? p.getAddresses().stream().map(this::toAddressResponse).toList()
+				.addresses(p.getAddresses() != null ? p.getAddresses().stream().map(this::toAddressResponse).collect(Collectors.toCollection(ArrayList::new))
 						: java.util.List.of())
 				.createdAt(p.getCreatedAt()).updatedAt(p.getUpdatedAt()).build();
 	}
